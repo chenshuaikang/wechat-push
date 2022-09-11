@@ -49,7 +49,7 @@ public class PushConfigBean {
     /**
      * 天行数据apiKey
      */
-    private static String rainbowKey;
+    private static String flatterKey;
 
     /**
      * 是否使用农历计算生日
@@ -60,7 +60,7 @@ public class PushConfigBean {
         return appId;
     }
 
-    public static void setAppId(String appId) {
+    public void setAppId(String appId) {
         PushConfigBean.appId = appId;
     }
 
@@ -68,7 +68,7 @@ public class PushConfigBean {
         return secret;
     }
 
-    public static void setSecret(String secret) {
+    public void setSecret(String secret) {
         PushConfigBean.secret = secret;
     }
 
@@ -76,7 +76,7 @@ public class PushConfigBean {
         return district_id;
     }
 
-    public static void setDistrict_id(String district_id) {
+    public void setDistrict_id(String district_id) {
         PushConfigBean.district_id = district_id;
     }
 
@@ -84,7 +84,7 @@ public class PushConfigBean {
         return mapAk;
     }
 
-    public static void setMapAk(String mapAk) {
+    public void setMapAk(String mapAk) {
         PushConfigBean.mapAk = mapAk;
     }
 
@@ -92,7 +92,7 @@ public class PushConfigBean {
         return loveDate;
     }
 
-    public static void setLoveDate(String loveDate) {
+    public void setLoveDate(String loveDate) {
         PushConfigBean.loveDate = loveDate;
     }
 
@@ -100,7 +100,7 @@ public class PushConfigBean {
         return birthday;
     }
 
-    public static void setBirthday(String birthday) {
+    public void setBirthday(String birthday) {
         PushConfigBean.birthday = birthday;
     }
 
@@ -108,7 +108,7 @@ public class PushConfigBean {
         return userId;
     }
 
-    public static void setUserId(List<String> userId) {
+    public void setUserId(List<String> userId) {
         PushConfigBean.userId = userId;
     }
 
@@ -116,23 +116,23 @@ public class PushConfigBean {
         return templateId;
     }
 
-    public static void setTemplateId(String templateId) {
+    public void setTemplateId(String templateId) {
         PushConfigBean.templateId = templateId;
     }
 
-    public static String getRainbowKey() {
-        return rainbowKey;
+    public static String getFlatterKey() {
+        return flatterKey;
     }
 
-    public static void setRainbowKey(String rainbowKey) {
-        PushConfigBean.rainbowKey = rainbowKey;
+    public void setFlatterKey(String flatterKey) {
+        PushConfigBean.flatterKey = flatterKey;
     }
 
     public static boolean isUseLunar() {
         return useLunar;
     }
 
-    public static void setUseLunar(boolean useLunar) {
+    public void setUseLunar(boolean useLunar) {
         PushConfigBean.useLunar = useLunar;
     }
 }

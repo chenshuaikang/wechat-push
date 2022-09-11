@@ -1,10 +1,13 @@
 package com.imcsk.entity;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @Description 响应数据实体类
  * @Author csk
  * @Date 2022/8/31
  */
+@Component
 public class ResultBean {
     private String code;
     private String message;

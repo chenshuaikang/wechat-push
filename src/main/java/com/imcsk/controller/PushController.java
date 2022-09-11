@@ -1,5 +1,10 @@
 package com.imcsk.controller;
 
+import com.imcsk.entity.ResultBean;
+import com.imcsk.service.IFlatterService;
+import com.imcsk.service.IWeatherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -10,4 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PushController {
 
+    @Autowired
+    private IFlatterService iFlatterService;
+
+    @Autowired
+    private IWeatherService iWeatherService;
+
+    @RequestMapping("getFlatterTest")
+    public ResultBean getFlatterTest(){
+        return iFlatterService.getFlatter();
+    }
+
+    @RequestMapping("getWeatherTest")
+    public ResultBean getWeatherTest(){
+        return iWeatherService.getWeather();
+    }
 }
