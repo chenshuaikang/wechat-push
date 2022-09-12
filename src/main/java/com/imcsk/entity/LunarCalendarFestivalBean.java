@@ -3,7 +3,7 @@ package com.imcsk.entity;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description TODO
+ * @Description 获取公历日期的生肖、天干地支、农历年、农历月、农历日、公历节日、农历节日、24节气等数据
  * @Author csk
  * @Date 2022/9/11
  */
