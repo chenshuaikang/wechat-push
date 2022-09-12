@@ -6,6 +6,6 @@ public interface IPushService {
 
     String push();
 
-    WxMpTemplateMsgService gerService();
+    WxMpTemplateMsgService getService();
 
 }

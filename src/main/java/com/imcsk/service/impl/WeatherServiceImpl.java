@@ -29,8 +29,8 @@ public class WeatherServiceImpl implements IWeatherService {
 
         final String URL = "https://api.map.baidu.com/weather/v1/?district_id={districtId}&data_type=all&ak={ak}";
 
-        System.out.println(PushConfigBean.getDistrict_id()+"========");
-        System.out.println(PushConfigBean.getMapAk()+"========");
+        map.put("districtId", PushConfigBean.getDistrict_id());
+        map.put("ak", PushConfigBean.getMapAk());
 
         RestTemplate restTemplate = new RestTemplate();
 
