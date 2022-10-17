@@ -2,7 +2,11 @@
 基于 `springboot` 实现微信公众号消息推送
 
 ## 项目效果
+#### 公众号模板消息效果
 ![img.png](src/main/resources/image/推送效果.jpg)
+
+#### 企业微信图文消息效果
+![img.png](src/main/resources/image/企业微信推送效果.jpg)
 
 ## 已实现功能
 - [X] 获取天气信息
