@@ -2,13 +2,13 @@ server:
   port: 8088
 wechat:
   #  微信公众平台的appID
-  appId: 'wxbee132123877e2e7'
+  appId: ''
   #  微信公众平台的appSecret
-  secret: 'ca9b5d06f7715963b000b73bcb4efbc8'
+  secret: ''
   #  百度地图开放平台的城市ID
   district_id: '410500'
   #  百度地图开放平台的应用AK
-  mapAk: 'mHgTNjZsjBCw3LMO2P6xgVnoKmjds3vY'
+  mapAk: ''
   #  纪念日：注意格式yyyy-MM-dd
   loveDate: '2020-11-13'
   #  生日：注意格式yyyy-MM-dd （无论是计算阳历生日还是农历生日,一律填阳历出生年月日）
@@ -16,7 +16,7 @@ wechat:
   #  模板ID
   templateId: 'KxjoLdpS5cVZ_AAIUcQ1YOoRegsgbgPz8RRRRDyqboE'
   #  天行数据apiKey
-  flatterKey: 'd0bb2a800d88e33af3be6b3095be1725'
+  flatterKey: ''
   #  关注公众号的用户ID（要推送的人的用户ID,在微信公众平台里可以查看到,现在支持推送多个人）
   userId:
     - 'olHGCs_l2c5lOX8bqjqSP2eECQd4'
