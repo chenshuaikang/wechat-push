@@ -1,9 +1,7 @@
 package com.imcsk.controller;
 
 import com.imcsk.entity.ResultBean;
-import com.imcsk.service.IFlatterService;
-import com.imcsk.service.IPushService;
-import com.imcsk.service.IWeatherService;
+import com.imcsk.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +23,15 @@ public class PushController {
     @Autowired
     private IPushService iPushService;
 
+    @Autowired
+    private IGetAccessTokenService iGetAccessTokenService;
+
+    @Autowired
+    private IWxCpSendMsgSerivce iWxCpSendMsgSerivce;
+
+    @Autowired
+    private IGetBiYingImageService iGetBiYingImageService;
+
     @RequestMapping("getFlatterTest")
     public ResultBean getFlatterTest(){
         return iFlatterService.getFlatter();
@@ -38,5 +45,20 @@ public class PushController {
     @RequestMapping("pushTest")
     public String push(){
         return iPushService.push();
+    }
+
+    @RequestMapping("getAccessToken")
+    public ResultBean getAccessToken(){
+        return iGetAccessTokenService.getAccessToken();
+    }
+
+    @RequestMapping("sendMsgTest")
+    public ResultBean sendMsgTest(){
+        return iWxCpSendMsgSerivce.sendWxCpMsg();
+    }
+
+    @RequestMapping("getBiYingImageTest")
+    public ResultBean getBiYingImage(){
+        return iGetBiYingImageService.getImage();
     }
 }

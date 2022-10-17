@@ -55,6 +55,7 @@ public class WeatherServiceImpl implements IWeatherService {
         }
 
         JSONArray forecasts = jsonObject.getJSONObject("result").getJSONArray("forecasts");
+        System.out.println(forecasts);
         List<WeatherBean> weathers = forecasts.toJavaList(WeatherBean.class);
         WeatherBean weather = weathers.get(0);
         JSONObject now = jsonObject.getJSONObject("result").getJSONObject("now");

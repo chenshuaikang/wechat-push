@@ -56,6 +56,26 @@ public class PushConfigBean {
      */
     private static boolean useLunar;
 
+    /**
+     * 企业微信ID
+     */
+    private static String corpId;
+
+    /**
+     * 企业微信应用ID
+     */
+    private static String agentId;
+
+    /**
+     * 企业微信应用密钥
+     */
+    private static String corpSecret;
+
+    /**
+     * 接收企业微信消息用户ID
+     */
+    private static String toUser;
+
     public static String getAppId() {
         return appId;
     }
@@ -134,5 +154,37 @@ public class PushConfigBean {
 
     public void setUseLunar(boolean useLunar) {
         PushConfigBean.useLunar = useLunar;
+    }
+
+    public static String getCorpId() {
+        return corpId;
+    }
+
+    public void setCorpId(String corpId) {
+        PushConfigBean.corpId = corpId;
+    }
+
+    public static String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        PushConfigBean.agentId = agentId;
+    }
+
+    public static String getCorpSecret() {
+        return corpSecret;
+    }
+
+    public void setCorpSecret(String corpSecret) {
+        PushConfigBean.corpSecret = corpSecret;
+    }
+
+    public static String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        PushConfigBean.toUser = toUser;
     }
 }
