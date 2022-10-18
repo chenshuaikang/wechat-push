@@ -5,10 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.imcsk.entity.*;
-import com.imcsk.service.IFlatterService;
-import com.imcsk.service.IGetBiYingImageService;
-import com.imcsk.service.IWeatherService;
-import com.imcsk.service.IWxCpSendMsgSerivce;
+import com.imcsk.service.*;
 import com.imcsk.utils.LunarCalendarFestivalUtil;
 import com.imcsk.utils.MemoryDayUtil;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
@@ -36,10 +33,20 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
     @Autowired
     private IGetBiYingImageService iGetBiYingImageService;
 
+    @Autowired
+    private IGetAccessTokenService iGetAccessTokenService;
+
+    @Autowired
+    private ICovidDataQueryService iCovidDataQueryService;
+
     @Override
     public ResultBean sendWxCpMsg() {
+        /**
+         * 注意使用时access_token目前没有做缓存，存在过期可能（有效期三个小时），
+         * 过期时要用getAccessToken方法进行获取新的access_token
+         */
         final String URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" +
-                "7xKyInUOdJu6OIHm_3KB3WVNfwL4plsy-sjEMUD40VUw3ttdF-rn9eFR-9KFpDulShko0FE7HyUvZ4BGy0NC5nNhM8WPzhDJKM2AB5b5eR7-Qr2ss3U9vNQwolSXyUWSTjqnEO2YgfpzMmXk6qohgTsKhzCwePAoZTpdHEIHauqfUN-cMB4h3MZ_bYfNEmHHAeZ7iSc_WECeW3-QAjHs7w";
+                "uGNz_FMTOG93a7o8b0WNLf2PuTyMNjrC_ArOEJ6TNxwCfKRTjgHWdMZVGBNoEn7lDcSSDRI8BWjoC1gm367D7iYNga8OEMNW3SU2ihdkBAwreZ0a2ly2bs5PPlyQ5k9rKSCLU_Ajnl2h9V7bQ2xOc1ZR-jxmCgPxzu51SNfMkxkcdWtAbCpDwx74Txaie_lpYv5dJP-a6zkMqHNOua27Sg";
 
         ResultBean resultBean = new ResultBean();
 
@@ -142,18 +149,34 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
             LunarCalendarFestivalBean festivalBean = new LunarCalendarFestivalBean();
             festival.initLunarCalendarInfo(weatherBean.getDate(),festivalBean);
 
-//            sb.append("📅今天是："+weatherBean.getDate()+ "  " + weatherBean.getWeek()+"\n");
             sb.append("📅今天是农历" + festivalBean.getLunarYear() + "年 " + festivalBean.getLunarMonth() + "月" + festivalBean.getLunarDay()+"\n\r");
-//            sb.append("<br/>");
+            sb.append("❤今天是我们恋爱的第"+loveDay+"天,距离宝宝的生日还有"+birthday+"天\n\r");
             sb.append(""+weatherBean.getCityName()+"的天气："+weatherBean.getText_now()+" \n最低气温: "+weatherBean.getLow()+"度 \n最高气温: "+weatherBean.getHigh()+"度 \n风力: "+weatherBean.getWc_day()+" \n风向: "+weatherBean.getWd_day()+"\n\r");
-//            sb.append("<br/>");
-            sb.append("❤今天是我们恋爱的第"+loveDay+"天,距离宝宝的生日还有"+birthday+"天\n");
         }
+
+        ResultBean covidResult = iCovidDataQueryService.getCovidData();
+        if (!"1".equals(covidResult.getCode())) {
+            // 获取COVID-19数据失败
+            sb.append(covidResult.getMessage());
+        }else {
+            CovidDataBean covidDataBean = (CovidDataBean) covidResult.getData();
+            sb.append(covidDataBean.getCity()+"的疫情报告：\n");
+//            sb.append("🆕新增确诊："covidDataBean);
+            sb.append("🆕新增本土："+covidDataBean.getSure_new_loc()+"例\n");
+            sb.append("🆕新增本土无症状："+covidDataBean.getSure_new_hid()+"例\n");
+            sb.append("\uD83D\uDE37 现有确诊："+covidDataBean.getPresent()+"例\n");
+            sb.append("\uD83D\uDE37 累计确诊："+covidDataBean.getSure_cnt()+"例\n");
+            sb.append("⛔️高风险地区："+covidDataBean.getHcount()+"个\n");
+            sb.append("⚠️中风险地区："+covidDataBean.getMcount()+"个\n");
+            sb.append(covidDataBean.getTime());
+            sb.append("\n\r");
+        }
+
+
         // 获取天行API数据
         ResultBean flatterResult = iFlatterService.getFlatter();
         if (!"200".equals(flatterResult.getCode())){
             // 获取数据失败
-            sb.append("<br/>");
             sb.append(flatterResult.getMessage());
         }else {
             sb.append(flatterResult.getData());
@@ -205,9 +228,21 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
         return week;
     }
 
+    /**
+     * @Description: 获取必应图片链接
+     * @Return: 图片链接
+     * @Author csk
+     * @Date: 2022/10/17
+     */
     public String getImageUrl(){
         ResultBean bean = iGetBiYingImageService.getImage();
         BiYingImageBean imgBean = (BiYingImageBean) bean.getData();
         return imgBean.getImgUrl();
+    }
+
+    public String getAccessToken(){
+        ResultBean bean = iGetAccessTokenService.getAccessToken();
+
+        return bean.getData().toString();
     }
 }

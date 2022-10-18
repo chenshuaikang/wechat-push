@@ -24,10 +24,16 @@ public class PushController {
     private IPushService iPushService;
 
     @Autowired
+    private ICovidRiskQueryService iCovidQueryService;
+
+    @Autowired
     private IGetAccessTokenService iGetAccessTokenService;
 
     @Autowired
     private IWxCpSendMsgSerivce iWxCpSendMsgSerivce;
+
+    @Autowired
+    private ICovidDataQueryService iCovidDataQueryService;
 
     @Autowired
     private IGetBiYingImageService iGetBiYingImageService;
@@ -47,6 +53,11 @@ public class PushController {
         return iPushService.push();
     }
 
+    @RequestMapping("covidQueryTest")
+    public ResultBean covidQueryTest(){
+        return iCovidQueryService.getCovidRiskArea();
+    }
+
     @RequestMapping("getAccessToken")
     public ResultBean getAccessToken(){
         return iGetAccessTokenService.getAccessToken();
@@ -55,6 +66,11 @@ public class PushController {
     @RequestMapping("sendMsgTest")
     public ResultBean sendMsgTest(){
         return iWxCpSendMsgSerivce.sendWxCpMsg();
+    }
+
+    @RequestMapping("covidDataQueryTest")
+    public ResultBean covidDataQueryTest(){
+        return iCovidDataQueryService.getCovidData();
     }
 
     @RequestMapping("getBiYingImageTest")
