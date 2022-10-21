@@ -38,6 +38,9 @@ public class PushController {
     @Autowired
     private IGetBiYingImageService iGetBiYingImageService;
 
+    @Autowired
+    private IGetOneDataService iGetOneDataService;
+
     @RequestMapping("getFlatterTest")
     public ResultBean getFlatterTest(){
         return iFlatterService.getFlatter();
@@ -76,5 +79,10 @@ public class PushController {
     @RequestMapping("getBiYingImageTest")
     public ResultBean getBiYingImage(){
         return iGetBiYingImageService.getImage();
+    }
+
+    @RequestMapping("getOneDataTest")
+    public ResultBean getOneData(){
+        return iGetOneDataService.getOneData();
     }
 }

@@ -39,17 +39,21 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
     @Autowired
     private ICovidDataQueryService iCovidDataQueryService;
 
+    @Autowired
+    private IGetOneDataService iGetOneDataService;
+
     @Override
     public ResultBean sendWxCpMsg() {
         /**
+         * TODO 将 access_token 配置成缓存形式
          * 注意使用时access_token目前没有做缓存，存在过期可能（有效期三个小时），
          * 过期时要用getAccessToken方法进行获取新的access_token
          */
         final String URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" +
-                "uGNz_FMTOG93a7o8b0WNLf2PuTyMNjrC_ArOEJ6TNxwCfKRTjgHWdMZVGBNoEn7lDcSSDRI8BWjoC1gm367D7iYNga8OEMNW3SU2ihdkBAwreZ0a2ly2bs5PPlyQ5k9rKSCLU_Ajnl2h9V7bQ2xOc1ZR-jxmCgPxzu51SNfMkxkcdWtAbCpDwx74Txaie_lpYv5dJP-a6zkMqHNOua27Sg";
+                "K9PIdl07Du9wQpvmBJr-siUZ735Rl4siDS3CtszuT3hbZ9l78YLDZ3181UdG3FuTYk5I4uRMD8TdPAHRfmDjJfxarbSBxUlvDJv2H6rRdDZT_n6mfo0hnFrmXytEPRa9-phkL3bG2cGmWw_klg6a36JKss70S6mQ2y_50S7bs3fFRFI9yS1nKNUFWh_bPDcjwBeHqB8yIwodypRSkO1m_A";
 
         ResultBean resultBean = new ResultBean();
-
+        OneDataBean oneDataReult = getOneData();
         // 请求头
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json; charset=UTF-8");
@@ -68,9 +72,9 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
         LocalDate localDate = LocalDate.now();
 
         json.put("title",localDate+"  "+getWeekName(getWeek(localDate))+"温馨推送");
-        json.put("description",buildMsg());
+        json.put("description",buildMsg(oneDataReult));
         json.put("url","");
-        json.put("picurl",getImageUrl());
+        json.put("picurl",oneDataReult.getImgurl());
         jsonArray.add(json);
 
         contentMap.put("articles", jsonArray);
@@ -123,7 +127,7 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
         return resultBean;
     }
 
-    public String buildMsg(){
+    public String buildMsg(OneDataBean oneDataBean){
         StringBuilder sb = new StringBuilder();
         // 计算纪念日天数
         long loveDay = MemoryDayUtil.calculationLianAi(PushConfigBean.getLoveDate());
@@ -150,7 +154,7 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
             festival.initLunarCalendarInfo(weatherBean.getDate(),festivalBean);
 
             sb.append("📅今天是农历" + festivalBean.getLunarYear() + "年 " + festivalBean.getLunarMonth() + "月" + festivalBean.getLunarDay()+"\n\r");
-            sb.append("❤今天是我们恋爱的第"+loveDay+"天,距离宝宝的生日还有"+birthday+"天\n\r");
+//            sb.append("❤今天是我们恋爱的第"+loveDay+"天,距离宝宝的生日还有"+birthday+"天\n\r");
             sb.append(""+weatherBean.getCityName()+"的天气："+weatherBean.getText_now()+" \n最低气温: "+weatherBean.getLow()+"度 \n最高气温: "+weatherBean.getHigh()+"度 \n风力: "+weatherBean.getWc_day()+" \n风向: "+weatherBean.getWd_day()+"\n\r");
         }
 
@@ -160,7 +164,11 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
             sb.append(covidResult.getMessage());
         }else {
             CovidDataBean covidDataBean = (CovidDataBean) covidResult.getData();
-            sb.append(covidDataBean.getCity()+"的疫情报告：\n");
+            String city = covidDataBean.getCity();
+            if (""==city || null == city){
+                city = covidDataBean.getProvince();
+            }
+            sb.append(city+"的疫情报告：\n");
 //            sb.append("🆕新增确诊："covidDataBean);
             sb.append("🆕新增本土："+covidDataBean.getSure_new_loc()+"例\n");
             sb.append("🆕新增本土无症状："+covidDataBean.getSure_new_hid()+"例\n");
@@ -173,14 +181,17 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
         }
 
 
+        // 添加one数据
+        System.out.println(oneDataBean.getWord());
+        sb.append(oneDataBean.getWord());
         // 获取天行API数据
-        ResultBean flatterResult = iFlatterService.getFlatter();
-        if (!"200".equals(flatterResult.getCode())){
-            // 获取数据失败
-            sb.append(flatterResult.getMessage());
-        }else {
-            sb.append(flatterResult.getData());
-        }
+//        ResultBean flatterResult = iFlatterService.getFlatter();
+//        if (!"200".equals(flatterResult.getCode())){
+//            // 获取数据失败
+//            sb.append(flatterResult.getMessage());
+//        }else {
+//            sb.append(flatterResult.getData());
+//        }
         return sb.toString();
     }
 
@@ -244,5 +255,16 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
         ResultBean bean = iGetAccessTokenService.getAccessToken();
 
         return bean.getData().toString();
+    }
+
+    /**
+     * @Description: 获取one一个相关数据
+     * @Return: one数据
+     * @Author csk
+     * @Date: 2022/10/18
+     */
+    public OneDataBean getOneData(){
+        ResultBean bean = iGetOneDataService.getOneData();
+        return (OneDataBean) bean.getData();
     }
 }
