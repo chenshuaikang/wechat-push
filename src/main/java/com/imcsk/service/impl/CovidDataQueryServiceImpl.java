@@ -19,7 +19,7 @@ import java.util.Map;
 public class CovidDataQueryServiceImpl implements ICovidDataQueryService {
     @Override
     public ResultBean getCovidData() {
-        final String URL = "https://covid.myquark.cn/quark/covid/data/index_data?format=json&method=Huoshenshan.ncov2022&city=淮安";
+        final String URL = "https://covid.myquark.cn/quark/covid/data/index_data?format=json&method=Huoshenshan.ncov2022&city=北京";
         ResultBean resultBean = new ResultBean();
 
         RestTemplate restTemplate = new RestTemplate();
@@ -48,6 +48,10 @@ public class CovidDataQueryServiceImpl implements ICovidDataQueryService {
         }
         JSONObject data = jsonObject.getJSONObject("data").getJSONObject("cityData");
         System.out.println(data);
+        if (null == data) {
+            // 直辖市
+            data = jsonObject.getJSONObject("data").getJSONObject("provinceData");
+        }
         CovidDataBean covidDataBean = JSONObject.toJavaObject(data,CovidDataBean.class);
         // 中风险地区个数
         covidDataBean.setMcount(data.getJSONObject("danger").getString("1"));
