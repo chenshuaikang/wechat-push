@@ -49,8 +49,8 @@ public class WxCpSendMsgImpl implements IWxCpSendMsgSerivce {
          * 注意使用时access_token目前没有做缓存，存在过期可能（有效期三个小时），
          * 过期时要用getAccessToken方法进行获取新的access_token
          */
-        final String URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" +
-                "K9PIdl07Du9wQpvmBJr-siUZ735Rl4siDS3CtszuT3hbZ9l78YLDZ3181UdG3FuTYk5I4uRMD8TdPAHRfmDjJfxarbSBxUlvDJv2H6rRdDZT_n6mfo0hnFrmXytEPRa9-phkL3bG2cGmWw_klg6a36JKss70S6mQ2y_50S7bs3fFRFI9yS1nKNUFWh_bPDcjwBeHqB8yIwodypRSkO1m_A";
+        String access_token = getAccessToken();
+        final String URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + access_token;
 
         ResultBean resultBean = new ResultBean();
         OneDataBean oneDataReult = getOneData();
